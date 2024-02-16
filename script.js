@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const galleryButton = document.getElementById("show-gallery");
-  const imageGallery = document.querySelector(".image-gallery");
-  const thankYouMessage = document.querySelector(".thank-you");
+	const galleryButton = document.getElementById("show-gallery");
+	const imageGallery = document.querySelector(".image-gallery");
+	const thankYouMessage = document.querySelector(".thank-you");
 
 	const GIPHY_ROOT = "https://media.giphy.com/media";
 
@@ -22,26 +22,23 @@ document.addEventListener("DOMContentLoaded", function () {
 		"ERy32lxHhXfpu",
 	];
 
-  let currentGIFIndex = 0;
+	const catGIFs = gifIds.map((id) => `${GIPHY_ROOT}/${id}/giphy.gif`);
 
+	galleryButton.addEventListener("click", function () {
+		imageGallery.classList.add("active");
+		renderGIFS();
+	});
 
-    galleryButton.addEventListener("click", function () {
-      imageGallery.classList.add("active");
-      showNextGIF();
-    });
-
-  function showNextGIF() {
-    if (currentGIFIndex < catGIFs.length) {
-      const img = new Image();
-      img.onload = function () {
-        imageGallery.appendChild(img);
-        img.classList.add("active"); // Show the new image
-        currentGIFIndex++;
-        setTimeout(showNextGIF, 1000);
-      };
-      img.src = catGIFs[currentGIFIndex];
-    } else {
-      thankYouMessage.classList.add("active");
-    }
-  }
+	const renderGIFS = async () => {
+		catGIFs.forEach(async (gif) => {
+			const img = new Image();
+			img.onload = function () {
+				imageGallery.appendChild(img);
+				img.classList.add("active"); // Show the new image
+			};
+			img.src = gif;
+			await new Promise((r) => setTimeout(r, 1000));
+		});
+		thankYouMessage.classList.add("active");
+	};
 });
